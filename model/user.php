@@ -16,12 +16,12 @@ class User
 	    $pdo = accsess_mysql();
 
 	    // @TODO nameの重複チェック
-	    $statement = $pdo -> prepare( "INSERT INTO user (name, pass) VALUES (:name, :pass)" );
-	    $statemwnt -> bindParam(':name', $name, PDO::PARAM_STR);
-	    $statement -> bindValue(':pass', $pass, PDO::PARAM_INT);
+	    $statement = $pdo -> prepare( "INSERT INTO user (user_name, password) VALUES (:user_name, :password)" );
+	    $statement -> bindParam(':user_name', $user_name, PDO::PARAM_STR);
+	    $statement -> bindValue(':password', $password, PDO::PARAM_INT);
 
-	    $name = $_POST('name');
-	    $pass = $_POST('pass');
+	    $user_name = $_POST('name');
+	    $password = $_POST('pass');
 	    $statement -> execute();
 
 	} catch(Exception $e) {
@@ -33,16 +33,6 @@ class User
 
 	session_start();
 
-
-	$pdo = accsess_mysql();
-
-	$statement = $pdo -> prepare( "INSERT INTO user (name, pass) VALUES (:name, :pass)" );
-	$statement -> bindParam(':name', $name, PDO::PARAM_STR);
-	$statement -> bindValue(':pass', $pass, PDO::PARAM_INT);
-
-	$name = $_POST('name');
-	$pass = $_POST('pass');
-	$statement -> execute();
     }
 
     public function logout() {
