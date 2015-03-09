@@ -16,13 +16,13 @@ class User
 	    $pdo = accsess_mysql();
 
 	    // @TODO nameの重複チェック
-	    $stmt = $pdo -> prepare( "INSERT INTO user (name, pass) VALUES (:name, :pass)" );
-	    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-	    $stmt->bindValue(':pass', $pass, PDO::PARAM_INT);
+	    $statement = $pdo -> prepare( "INSERT INTO user (name, pass) VALUES (:name, :pass)" );
+	    $statemwnt -> bindParam(':name', $name, PDO::PARAM_STR);
+	    $statement -> bindValue(':pass', $pass, PDO::PARAM_INT);
 
 	    $name = $_POST('name');
 	    $pass = $_POST('pass');
-	    $stmt->execute();
+	    $statement -> execute();
 
 	} catch(Exception $e) {
 	    echo '不正なアクセス';
@@ -36,13 +36,13 @@ class User
 
 	$pdo = accsess_mysql();
 
-	$stmt = $pdo -> prepare( "INSERT INTO user (name, pass) VALUES (:name, :pass)" );
-	$stmt->bindParam(':name', $name, PDO::PARAM_STR);
-	$stmt->bindValue(':pass', $pass, PDO::PARAM_INT);
+	$statement = $pdo -> prepare( "INSERT INTO user (name, pass) VALUES (:name, :pass)" );
+	$statement -> bindParam(':name', $name, PDO::PARAM_STR);
+	$statement -> bindValue(':pass', $pass, PDO::PARAM_INT);
 
 	$name = $_POST('name');
 	$pass = $_POST('pass');
-	$stmt->execute();
+	$statement -> execute();
     }
 
     public function logout() {
