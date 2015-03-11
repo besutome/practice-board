@@ -8,7 +8,6 @@ class Thread
 
 	$loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
 	$twig = new Twig_Environment($loader);
-	$template = $twig->loadTemplate('thread.twig');
     }
 
     public function create_thread() {
@@ -23,6 +22,8 @@ class Thread
 	// @todo user_idを取得するロジック
 	$user_id = ;
 	$statement -> execute();
+
+	$template = $twig->loadTemplate('create_thread.twig');
     }
 
     public function list_thread() {
@@ -31,6 +32,8 @@ class Thread
 
 	$result = $statement -> fetch(PDO::FETCH_ASSOC);
 	return $result;
+
+	$template = $twig->loadTemplate('list_thread.twig');
     }
 
     public function manage_thread() {
@@ -43,6 +46,8 @@ class Thread
 	// @TODO thread_idを取得するロジック
 	$thread_id = 
 	$statement -> execute();
+
+	$template = $twig->loadTemplate('manage_thread.twig');
     }
 
     public function delete_thread() {
@@ -54,6 +59,8 @@ class Thread
 	// @TODO thread_idを取得するロジック
 	$thread_id = 
 	$statement -> execute();
+
+	$template = $twig->loadTemplate('delete_thread.twig');
     }
 
     private function access_mysql() {

@@ -8,7 +8,6 @@ class Reply
 
 	$loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
 	$twig = new Twig_Environment($loader);
-	$template = $twig->loadTemplate('reply.twig');
     }
 
     public function create_reply() {
@@ -26,6 +25,8 @@ class Reply
 	$user_id = ;
 	$message = $_POST('message');
 	$statement -> execute();
+
+	$template = $twig->loadTemplate('create_reply.twig');
     }
 
     public function list_reply() {
@@ -38,6 +39,8 @@ class Reply
 	$statement -> execute();
 
 	$result = $statement -> fetch(PDO::FETCH_ASSOC);
+
+	$template = $twig->loadTemplate('list_reply.twig');
 	return $result;
     }
 
@@ -54,6 +57,8 @@ class Reply
 	$reply_id = ;
 	$statement -> execute();
 
+	$template = $twig->loadTemplate('manage_reply.twig');
+
     }
 
     public function delete_reply() {
@@ -67,6 +72,7 @@ class Reply
 	$reply_id = ;
 	$statement -> execute();
 
+	$template = $twig->loadTemplate('delete_reply.twig');
 
     }
 

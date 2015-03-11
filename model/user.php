@@ -8,7 +8,6 @@ class User
 
 	$loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
 	$twig = new Twig_Environment($loader);
-	$template = $twig->loadTemplate('user.twig');
     }
 
     public function create_user() {
@@ -36,6 +35,8 @@ class User
 	} catch(Exception $e) {
 	    echo '不正なアクセス';
 	}
+
+	$template = $twig->loadTemplate('create_user.twig');
     }
 
     public function login() {
@@ -65,6 +66,7 @@ class User
 	    }
 	}
 
+	$template = $twig->loadTemplate('login.twig');
 	return $status
     }
 
