@@ -14,13 +14,14 @@ class User
 	try {
 
 	    $pdo = accsess_mysql();
+	    $query = "INSERT INTO user (user_name, password) VALUES (:user_name, :password) WHERE `deleted` = false";
 
 	    // @TODO nameの重複チェック
-	    $statement = $pdo -> prepare( "INSERT INTO user (user_name, password) VALUES (:user_name, :password)" );
-	    $statement -> bindParam(':user_name', $user_name, PDO::PARAM_STR);
-	    $statement -> bindValue(':password', $password, PDO::PARAM_INT);
+	    $statement = $pdo -> prepare($query);
+	    $statement -> bindValue(':user_name', $user_name, PDO::PARAM_STR);
+	    $statement -> bindValue(':password', $password, PDO::PARAM_STR);
 
-	    $user_name = $_POST('name');
+	    $user_name = $_POST('user_name');
 	    $password = $_POST('pass');
 	    $statement -> execute();
 
@@ -32,28 +33,43 @@ class User
     public function login() {
 
 	session_start();
+	$pdo = accsess_mysql();
+	$status = 'none';
 
+	if( isset($_SESSION['user_name']) ) {
+	    $status = 'logged_in';
+	} else if( isset($_POST['user_name']) && isset($_POST['password']) ) {
+	    $query = "SELECT * FROM `users` WHERE `user_name` = :user_name AND `password` = :password WHERE `deleted` = false";
+	    $statement = $pdo -> prepare($query);
+	    $statement -> bindValue(':user_name', $user_name, PDO::PARAM_STR);
+	    $statement -> bindValue(':password', $password, PDO::PARAM_STR);
+
+	    // @TODO パスワード暗号化
+	    $password = $_POST["password"];
+	    $user_name = $_POST['user_name'];
+	    $statement -> execute();
+
+	    if( $statement -> fetchColumn() === 1 ) {
+		$_SESSION["user_name"] = $_POST["user_name"];
+		$status = 'login';
+	    } else {
+		$status = "failed";
+	    }
+	}
+
+	return $status
     }
 
     public function logout() {
 
-	if (isset($_SESSION['USERID'])) {
+	if ( isset($_SESSION['USERID']) ) {
 	    $message = "ログアウトしました。";
-	}
-	else {
+	} else {
 	    $message = "セッションがタイムアウトしました。";
 	}
 
 	session_start();
 	$_SESSION = array();
-
-	if (ini_get("session.use_cookies")) {
-	    $params = session_get_cookie_params();
-	    setcookie(session_name(), '', time() - 42000,
-		$params["path"], $params["domain"],
-		$params["secure"], $params["httponly"]
-	    );
-	}
 	session_destroy();
 
 	HTTP::redirect('/');
