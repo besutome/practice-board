@@ -8,6 +8,7 @@ class User
 
 	$loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
 	$twig = new Twig_Environment($loader);
+
     }
 
     public function create_user() {
@@ -68,7 +69,7 @@ class User
 	}
 
 	$template = $twig->loadTemplate('login.twig');
-	return $status
+	return $status;
     }
 
     public function logout() {
