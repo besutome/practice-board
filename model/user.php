@@ -37,6 +37,7 @@ class User
 	}
 
 	$template = $twig->loadTemplate('create_user.twig');
+	return $template->render([ 'user_name' => $user_name, 'password' => $password ]);
     }
 
     public function login() {
