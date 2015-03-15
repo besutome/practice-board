@@ -20,9 +20,9 @@ class Reply
 	$statement -> bindvalue(':message', $message, pdo::PARAM_STR);
 
 	// @todo board_idを取得するロジック
-	$board_id = ;
+	// $board_id = ;
 	// @todo user_idを取得するロジック
-	$user_id = ;
+	// $user_id = ;
 	$message = $_POST('message');
 	$statement -> execute();
 
@@ -35,7 +35,7 @@ class Reply
 	$statement -> bindvalue(':user_id', $user_id, pdo::PARAM_STR);
 	
 	// @todo user_idを取得するロジック
-	$user_id = ;
+	// $user_id = ;
 	$statement -> execute();
 
 	$result = $statement -> fetch(PDO::FETCH_ASSOC);
@@ -54,7 +54,7 @@ class Reply
 
 	$message = $_POST['message'];
 	// @todo reply_idを取得するロジック
-	$reply_id = ;
+	// $reply_id = ;
 	$statement -> execute();
 
 	$template = $twig->loadTemplate('manage_reply.twig');
@@ -69,7 +69,7 @@ class Reply
 	$statement -> bindValue(':reply_id', $reply_id, PDO::PARAM_INT);
 	
 	// @TODO reply_idを取得するロジック
-	$reply_id = ;
+	// $reply_id = ;
 	$statement -> execute();
 
 	$template = $twig->loadTemplate('delete_reply.twig');

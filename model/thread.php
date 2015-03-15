@@ -20,7 +20,7 @@ class Thread
 
 	$thread_name = $_POST('thread_name');
 	// @todo user_idを取得するロジック
-	$user_id = ;
+	// $user_id = ;
 	$statement -> execute();
 
 	$template = $twig->loadTemplate('create_thread.twig');
@@ -44,7 +44,7 @@ class Thread
 	$statement -> bindValue(':thread_id', $thread_id, PDO::PARAM_INT);
 
 	// @TODO thread_idを取得するロジック
-	$thread_id = 
+	// $thread_id = 
 	$statement -> execute();
 
 	$template = $twig->loadTemplate('manage_thread.twig');
@@ -57,7 +57,7 @@ class Thread
 	$statement = $pdo -> prepare($query);
 	
 	// @TODO thread_idを取得するロジック
-	$thread_id = 
+	// $thread_id = 
 	$statement -> execute();
 
 	$template = $twig->loadTemplate('delete_thread.twig');
