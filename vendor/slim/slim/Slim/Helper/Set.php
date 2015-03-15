@@ -109,6 +109,7 @@ class Set implements \ArrayAccess, \Countable, \IteratorAggregate
     public function all()
     {
         return $this->data;
+	// return $template->render($this->data->all());
     }
 
     /**
@@ -165,6 +166,8 @@ class Set implements \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * Clear all values
+     *
+     *
      */
     public function clear()
     {
