@@ -30,6 +30,7 @@ $app->get('/create-user', function() use ($app) {
 
 $app->get('/login', function() use ($app) {
     $user = new User();
+
 });
 
 $app->get('/logout', function() use ($app) {
