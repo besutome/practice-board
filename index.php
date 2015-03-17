@@ -24,61 +24,64 @@ $app->group('/user', function () use ($app) {
 
     $app->post('/create', function() use ($app) {
 	$user = new User();
-	// $app -> render('create_user.twig', ['user_name' => $user_name, 'password' => $password]);
-	$loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
-	$twig = new Twig_Environment($loader);
-	echo $twig -> render('create_user.twig');
+	echo $user -> create();
     });
 
-    $app->get('/login', function() use ($app) {
+    $app->post('/login', function() use ($app) {
 	$user = new User();
+	echo $user -> login();
     });
 
     $app->get('/logout', function() use ($app) {
 	$user = new User();
+	echo $user -> logout();
     });
-}
+});
 
 $app->group('/reply', function () use ($app) {
 
-    $app->get('/create', function() use ($app) {
+    $app->post('/create', function() use ($app) {
 	$reply = new Reply();
+	echo $reply -> create_reply();
     });
 
     $app->get('/list', function() use ($app) {
 	$reply = new Reply();
+	echo $reply -> list_reply();
     });
 
-    $app->get('/manage', function() use ($app) {
+    $app->post('/manage', function() use ($app) {
 	$reply = new Reply();
+	echo $reply -> manage_reply();
     });
 
     $app->get('/delete', function() use ($app) {
 	$reply = new Reply();
+	echo $reply -> delete_reply();
     });
-}
+});
 
 $app->group('/thread', function () use ($app) {
 
-    $app->get('/create', function() use ($app) {
+    $app->post('/create', function() use ($app) {
 	$thread = new Thread();
+	echo $thread -> create_thread();
     });
 
     $app->get('/list', function() use ($app) {
 	$thread = new Thread();
+	echo $thread -> list_thread();
     });
 
     $app->get('/manage', function() use ($app) {
 	$thread = new Thread();
+	echo $thread -> manage_thread();
     });
 
     $app->get('/delete', function() use ($app) {
 	$thread = new Thread();
+	echo $thread -> delete_thread();
     });
-}
-
-
-
-
+});
 
 $app->run();

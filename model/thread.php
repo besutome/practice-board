@@ -23,7 +23,7 @@ class Thread
 	// $user_id = ;
 	$statement -> execute();
 
-	$template = $twig->loadTemplate('create_thread.twig');
+	$template = $twig->loadTemplate('thread/create.twig');
     }
 
     public function list_thread() {
@@ -33,7 +33,7 @@ class Thread
 	$result = $statement -> fetch(PDO::FETCH_ASSOC);
 	return $result;
 
-	$template = $twig->loadTemplate('list_thread.twig');
+	$template = $twig->loadTemplate('thread/list.twig');
     }
 
     public function manage_thread() {
@@ -47,7 +47,7 @@ class Thread
 	// $thread_id = 
 	$statement -> execute();
 
-	$template = $twig->loadTemplate('manage_thread.twig');
+	$template = $twig->loadTemplate('thread/manage.twig');
     }
 
     public function delete_thread() {
@@ -60,7 +60,7 @@ class Thread
 	// $thread_id = 
 	$statement -> execute();
 
-	$template = $twig->loadTemplate('delete_thread.twig');
+	$template = $twig->loadTemplate('thread/delete.twig');
     }
 
     private function access_mysql() {
@@ -68,7 +68,8 @@ class Thread
 	    // @TODO user名、パスワードを暗号化処理
 	    $db = 'mysql:dbname=board;host=localhost';
 	    $user = 'root';
-	    $password = 'password';
+	    // 本来ならパスは環境変数にぶち込む
+	    $password = 12266583;
 	    $pdo = new PDO($db, $user, $password);
 	} catch (PDOException $e) {
 	    echo 'データベース接続error' . $e->getMessage();

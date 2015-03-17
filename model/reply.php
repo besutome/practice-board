@@ -26,7 +26,8 @@ class Reply
 	$message = $_POST('message');
 	$statement -> execute();
 
-	$template = $twig->loadTemplate('create_reply.twig');
+	$template = $twig->loadTemplate('reply/create.twig');
+	return $template;
     }
 
     public function list_reply() {
@@ -40,7 +41,7 @@ class Reply
 
 	$result = $statement -> fetch(PDO::FETCH_ASSOC);
 
-	$template = $twig->loadTemplate('list_reply.twig');
+	$template = $twig->loadTemplate('reply/list.twig');
 	return $result;
     }
 
@@ -57,7 +58,7 @@ class Reply
 	// $reply_id = ;
 	$statement -> execute();
 
-	$template = $twig->loadTemplate('manage_reply.twig');
+	$template = $twig->loadTemplate('reply/manage.twig');
 
     }
 
@@ -72,7 +73,7 @@ class Reply
 	// $reply_id = ;
 	$statement -> execute();
 
-	$template = $twig->loadTemplate('delete_reply.twig');
+	$template = $twig->loadTemplate('reply/delete.twig');
 
     }
 
@@ -81,7 +82,8 @@ class Reply
 	    // @TODO user名、パスワードを暗号化処理
 	    $db = 'mysql:dbname=board;host=localhost';
 	    $user = 'root';
-	    $password = 'password';
+	    // 本来ならパスは環境変数にぶち込む
+	    $password = 12266583;
 	    $pdo = new PDO($db, $user, $password);
 	} catch (PDOException $e) {
 	    echo 'データベース接続error' . $e->getMessage();

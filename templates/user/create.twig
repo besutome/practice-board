@@ -11,10 +11,10 @@
 
     <body>
 	{{ user_name }}さん、ご登録ありがとうございます！
-	<form action='/templates/login.twig' method='post'>
-	    <p><label>ユーザー名:<input type='hidden' value='{{ user_name }}'></label></p>
-	    <p><label>パスワード:<input type='hidden' value='{{ password }}'></label></p>
-	    <p><input type="submit" value='ログイン'><input type="reset" value='リセット'></p>
+	<form action='/user/login' method='post'>
+	    <input type='hidden' value='{{ user_name }}'>
+	    <input type='hidden' value='{{ password }}'>
+	    <p><input type="submit" value='ログイン'></p>
 	</form>
     </body>
 </html>
