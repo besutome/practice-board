@@ -20,55 +20,65 @@ $app->get('/', function() use ($app) {
 });
 
 
-$app->get('/create-user', function() use ($app) {
-    $user = new User();
-    // $app -> render('create_user.twig', ['user_name' => $user_name, 'password' => $password]);
-    $loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
-    $twig = new Twig_Environment($loader);
-    echo $twig -> render('create_user.twig');
-});
+$app->group('/user', function () use ($app) {
 
-$app->get('/login', function() use ($app) {
-    $user = new User();
+    $app->post('/create', function() use ($app) {
+	$user = new User();
+	// $app -> render('create_user.twig', ['user_name' => $user_name, 'password' => $password]);
+	$loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
+	$twig = new Twig_Environment($loader);
+	echo $twig -> render('create_user.twig');
+    });
 
-});
+    $app->get('/login', function() use ($app) {
+	$user = new User();
+    });
 
-$app->get('/logout', function() use ($app) {
-    $user = new User();
-});
+    $app->get('/logout', function() use ($app) {
+	$user = new User();
+    });
+}
+
+$app->group('/reply', function () use ($app) {
+
+    $app->get('/create', function() use ($app) {
+	$reply = new Reply();
+    });
+
+    $app->get('/list', function() use ($app) {
+	$reply = new Reply();
+    });
+
+    $app->get('/manage', function() use ($app) {
+	$reply = new Reply();
+    });
+
+    $app->get('/delete', function() use ($app) {
+	$reply = new Reply();
+    });
+}
+
+$app->group('/thread', function () use ($app) {
+
+    $app->get('/create', function() use ($app) {
+	$thread = new Thread();
+    });
+
+    $app->get('/list', function() use ($app) {
+	$thread = new Thread();
+    });
+
+    $app->get('/manage', function() use ($app) {
+	$thread = new Thread();
+    });
+
+    $app->get('/delete', function() use ($app) {
+	$thread = new Thread();
+    });
+}
 
 
-$app->get('/create-reply', function() use ($app) {
-    $reply = new Reply();
-});
-
-$app->get('/list-reply', function() use ($app) {
-    $reply = new Reply();
-});
-
-$app->get('/manage-reply', function() use ($app) {
-    $reply = new Reply();
-});
-
-$app->get('/delete-reply', function() use ($app) {
-    $reply = new Reply();
-});
 
 
-$app->get('/create-thread', function() use ($app) {
-    $thread = new Thread();
-});
-
-$app->get('/list-thread', function() use ($app) {
-    $thread = new Thread();
-});
-
-$app->get('/manage-thread', function() use ($app) {
-    $thread = new Thread();
-});
-
-$app->get('/delete-thread', function() use ($app) {
-    $thread = new Thread();
-});
 
 $app->run();

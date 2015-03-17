@@ -13,7 +13,7 @@
 
 	<h2>新規登録</h2>
 	<p>
-	<form action='/create-user' method='post'>
+	<form action='/user/create' method='post'>
 	    <p><label>ユーザー名:<input type='text' name='user_name' size='30' maxlength='30'></label></p>
 	    <p><label>パスワード:<input type='password' name='password' size='30' maxlength='30'></label></p>
 	    <p><input type='submit' value='登録'></p>
@@ -23,7 +23,7 @@
 
 	<h2>ログイン</h2>
 	<p>
-	<form action='/login' method='post'>
+	<form action='/user/login' method='post'>
 	    <p><label>ユーザー名:<input type='text' name='user_name' size='30' maxlength='30' value='{{ user_name }}'></label></p>
 	    <p><label>パスワード:<input type='password' name='password' size='30' maxlength='30' value='{{ password }}'></label></p>
 	    <p><input type='submit' value='ログイン'></p>
