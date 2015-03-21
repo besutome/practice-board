@@ -13,6 +13,8 @@ class User
 
     public function create() {
 	$key = $_POST['key'];
+	$user_name = $_POST['user_name'];
+	$password = $_POST['password'];
 
 	// @TODO 'unko'を暗号化処理
 	if ($key !== 'unko') {
@@ -22,19 +24,17 @@ class User
 	try {
 
 	    $pdo = $this -> access_mysql();
-	    $query = "INSERT INTO user (user_name, password) VALUES (:user_name, :password) WHERE `deleted` = false";
+	    $query = "INSERT INTO users(user_name, password) VALUES(:user_name, :password)";
 
 	    // @TODO nameの重複チェック
 	    $statement = $pdo -> prepare($query);
 	    $statement -> bindValue(':user_name', $user_name, PDO::PARAM_STR);
 	    $statement -> bindValue(':password', $password, PDO::PARAM_STR);
 
-	    $user_name = $_POST['user_name'];
-	    $password = $_POST['password'];
 	    $statement -> execute();
 
 	} catch(Exception $e) {
-	    echo '不正なアクセス';
+	    echo '不正なアクセス' . $e->getMessage();
 	}
 
 	$loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
@@ -46,6 +46,12 @@ class User
 
     public function login() {
 
+	$app = \Slim\Slim::getInstance();
+
+	// @TODO パスワード暗号化
+	$password = $_POST["password"];
+	$user_name = $_POST['user_name'];
+
 	session_start();
 	$pdo = $this -> access_mysql();
 	$status = 'none';
@@ -53,21 +59,27 @@ class User
 	if( isset($_SESSION['user_name']) ) {
 	    $status = 'logged_in';
 	} else if( isset($_POST['user_name']) && isset($_POST['password']) ) {
-	    $query = "SELECT * FROM `users` WHERE `user_name` = :user_name AND `password` = :password WHERE `deleted` = false";
+	    $query = "SELECT * FROM `users` WHERE `user_name` = :user_name AND `password` = :password AND `deleted` IS NOT TRUE";
 	    $statement = $pdo -> prepare($query);
 	    $statement -> bindValue(':user_name', $user_name, PDO::PARAM_STR);
 	    $statement -> bindValue(':password', $password, PDO::PARAM_STR);
 
-	    // @TODO パスワード暗号化
-	    $password = $_POST["password"];
-	    $user_name = $_POST['user_name'];
 	    $statement -> execute();
+	    $result = $statement->rowCount();
+	    $statement -> closeCursor();
 
-	    if( $statement -> fetchColumn() === 1 ) {
+	    if( $result === 1 ) {
 		$_SESSION["user_name"] = $_POST["user_name"];
-		$status = 'login';
+		$status = 'success';
+
+
+		$app->flash('error', 'User email is required');
 	    } else {
 		$status = "failed";
+
+		$app->flash('error', 'User email is required');
+
+		$app->redirect('/');
 	    }
 	}
 
@@ -86,11 +98,14 @@ class User
 	    $message = "セッションがタイムアウトしました。";
 	}
 
+	$_POST = array();
 	session_start();
 	$_SESSION = array();
 	session_destroy();
 
-	HTTP::redirect('/');
+	$app = \Slim\Slim::getInstance();
+	$app->flash('info', $message);
+	$app->redirect('/');
 	return $message;
     }
 
@@ -102,6 +117,7 @@ class User
 	    // 本来ならパスは環境変数にぶち込む
 	    $password = 12266583;
 	    $pdo = new PDO($db, $user, $password);
+	    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	} catch (PDOException $e) {
 	    echo 'データベース接続error' . $e->getMessage();
 	}

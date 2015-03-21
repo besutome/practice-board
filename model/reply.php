@@ -85,6 +85,7 @@ class Reply
 	    // 本来ならパスは環境変数にぶち込む
 	    $password = 12266583;
 	    $pdo = new PDO($db, $user, $password);
+	    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	} catch (PDOException $e) {
 	    echo 'データベース接続error' . $e->getMessage();
 	}
