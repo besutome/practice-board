@@ -1,9 +1,12 @@
 <h2>スレッド一覧</h2>
 
 
-$messageによって出し分け	
+<!-- $messageによって出し分け -->
 
-<a href='/thread/create'>スレッド作成</a>
+<form action='/thread/create' method='post'>
+    <p><label>スレッド名:<input type='text' name='thread_name' size='30' maxlength='30'></label></p>
+    <p><input type="submit" value='スレッド作成'></p>
+</form>
 
 <a href='/user/logout'>ログアウト</a>
 

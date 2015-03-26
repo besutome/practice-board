@@ -11,22 +11,26 @@ class Thread
     }
 
     public function create_thread() {
-	$pdo = access_mysql();
+	session_start();
+	$thread_name = $_POST['thread_name'];
+	$user_id = $_SESSION['user_id'];
+
+	$pdo = $this -> access_mysql();
 	$query = "INSERT INTO `threads` (thread_name, user_id) VALUES (:thread_name, :user_id)";
 
 	$statement = $pdo -> prepare($query);
 	$statement -> bindvalue(':thread_name', $thread_name, pdo::PARAM_STR);
 	$statement -> bindvalue(':user_id', $user_id, pdo::PARAM_INT);
-
-	$thread_name = $_POST('thread_name');
-	$user_id = $_SESSION['user_id'];
 	$statement -> execute();
 
-	$template = $twig->loadTemplate('thread/create.twig');
+	$loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
+	$twig = new Twig_Environment($loader);
+	$template = $twig->loadTemplate('thread/list.twig');
+	return $template->render([ 'thread_name' => $thread_name ]);
     }
 
     public function list_thread() {
-	$pdo = access_mysql();
+	$pdo = $this -> access_mysql();
 	$statement = $pdo -> query( "SELECT `thread_name` FROM `threads` WHERE `deleted` = false" );
 
 	$result = $statement -> fetch(PDO::FETCH_ASSOC);

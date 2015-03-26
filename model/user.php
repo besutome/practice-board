@@ -6,8 +6,8 @@ class User
 	require_once __DIR__ . '/../vendor/autoload.php';
 	Twig_Autoloader::register();
 
-	$loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
-	$twig = new Twig_Environment($loader);
+	// $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
+	// $twig = new Twig_Environment($loader);
 
     }
 
@@ -24,7 +24,7 @@ class User
 	try {
 
 	    $pdo = $this -> access_mysql();
-	    $query = "INSERT INTO users(user_name, password) VALUES(:user_name, :password)";
+	    $query = "INSERT IGNORE INTO users(user_name, password) VALUES(:user_name, :password)";
 
 	    // @TODO nameの重複チェック
 	    $statement = $pdo -> prepare($query);
@@ -65,19 +65,20 @@ class User
 	    $statement -> bindValue(':password', $password, PDO::PARAM_STR);
 
 	    $statement -> execute();
-	    foreach ($statement as $row) {
-		$_SESSION['user_id'] = $row['user_id'];
-}
 	    $result = $statement->rowCount();
-	    $statement -> closeCursor();
 
 	    if( $result === 1 ) {
 		$_SESSION["user_name"] = $_POST["user_name"];
+		foreach ($statement as $row) {
+		    $_SESSION['user_id'] = $row['user_id'];
+		}
+
+		$statement -> closeCursor();
 		$status = 'success';
 
-
-		$app->flash('error', 'User email is required');
 	    } else {
+
+		$statement -> closeCursor();
 		$status = "failed";
 
 		$app->flash('error', 'User email is required');
@@ -88,14 +89,15 @@ class User
 
 	$loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
 	$twig = new Twig_Environment($loader);
-
 	$template = $twig->loadTemplate('user/login.twig');
-	return $template->render([ 'message' => $message ]);
+
+var_dump($_SESSION);
+	return $template->render([ 'message' => $message, 'user_name' => $user_name, 'password' => $password ]);
     }
 
     public function logout() {
 
-	if ( isset($_SESSION['USERID']) ) {
+	if ( isset($_SESSION['user_id']) ) {
 	    $message = "ログアウトしました。";
 	} else {
 	    $message = "セッションがタイムアウトしました。";
