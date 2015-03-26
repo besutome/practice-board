@@ -19,8 +19,7 @@ class Thread
 	$statement -> bindvalue(':user_id', $user_id, pdo::PARAM_INT);
 
 	$thread_name = $_POST('thread_name');
-	// @todo user_idを取得するロジック
-	// $user_id = ;
+	$user_id = $_SESSION['user_id'];
 	$statement -> execute();
 
 	$template = $twig->loadTemplate('thread/create.twig');

@@ -65,6 +65,9 @@ class User
 	    $statement -> bindValue(':password', $password, PDO::PARAM_STR);
 
 	    $statement -> execute();
+	    foreach ($statement as $row) {
+		$_SESSION['user_id'] = $row['user_id'];
+}
 	    $result = $statement->rowCount();
 	    $statement -> closeCursor();
 
@@ -104,8 +107,8 @@ class User
 	session_destroy();
 
 	$app = \Slim\Slim::getInstance();
-	$app->flash('info', $message);
-	$app->redirect('/');
+	// $app->flash('info', $message);
+	// $app->redirect('/');
 	return $message;
     }
 
