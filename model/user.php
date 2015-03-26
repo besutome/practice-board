@@ -39,7 +39,6 @@ class User
 
 	$loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
 	$twig = new Twig_Environment($loader);
-
 	$template = $twig->loadTemplate('user/create.twig');
 	return $template->render([ 'user_name' => $user_name, 'password' => $password ]);
     }
@@ -91,7 +90,6 @@ class User
 	$twig = new Twig_Environment($loader);
 	$template = $twig->loadTemplate('user/login.twig');
 
-var_dump($_SESSION);
 	return $template->render([ 'message' => $message, 'user_name' => $user_name, 'password' => $password ]);
     }
 

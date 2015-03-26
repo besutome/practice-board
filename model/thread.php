@@ -25,23 +25,31 @@ class Thread
 
 	$loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
 	$twig = new Twig_Environment($loader);
-	$template = $twig->loadTemplate('thread/list.twig');
+	$template = $twig->loadTemplate('thread/create.twig');
+
 	return $template->render([ 'thread_name' => $thread_name ]);
     }
 
     public function list_thread() {
 	$pdo = $this -> access_mysql();
-	$statement = $pdo -> query( "SELECT `thread_name` FROM `threads` WHERE `deleted` = false" );
+	$statement = $pdo -> query( "SELECT `thread_name` FROM `threads` WHERE `deleted` IS NOT TRUE" );
 
 	$result = $statement -> fetch(PDO::FETCH_ASSOC);
-	return $result;
+	foreach ($statement as $key => $value) {
+	    $thread_name[$key] =  $value['thread_name'];
+	}
 
+	$loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
+	$twig = new Twig_Environment($loader);
 	$template = $twig->loadTemplate('thread/list.twig');
+    var_dump($thread_name);
+
+	return $template->render($thread_name);
     }
 
     public function manage_thread() {
 	$pdo = access_mysql();
-	$query = "UPDATE `threads` SET thread_name = :thread_name WHERE `thread_id` = :thread_id AND `deleted` = false";
+	$query = "UPDATE `threads` SET thread_name = :thread_name WHERE `thread_id` = :thread_id AND `deleted` IS NOT TRUE";
 
 	$statement = $pdo -> prepare($query);
 	$statement -> bindValue(':thread_id', $thread_id, PDO::PARAM_INT);
@@ -55,7 +63,7 @@ class Thread
 
     public function delete_thread() {
 	$pdo = access_mysql();
-	$query = "UPDATE `threads` SET deleted = true WHERE `thread_id` = :thread_id AND `deleted` = false";
+	$query = "UPDATE `threads` SET deleted = true WHERE `thread_id` = :thread_id AND `deleted` IS NOT TRUE";
 
 	$statement = $pdo -> prepare($query);
 	
