@@ -10,11 +10,11 @@ class Thread
 	$twig = new Twig_Environment($loader);
     }
 
-    public function show_thread($board_id){
+    public function show_thread($thread_id){
 	$pdo = $this -> access_mysql();
-	$query = "SELECT `message`, `user_id` FROM `replies` WHERE `deleted` IS NOT TRUE AND `board_id` = :board_id";
+	$query = "SELECT `message`, `user_id` FROM `replies` WHERE `deleted` IS NOT TRUE AND `board_id` = :thread_id";
 	$statement = $pdo -> prepare($query);
-	$statement -> bindvalue(':board_id', $board_id, pdo::PARAM_INT);
+	$statement -> bindvalue(':thread_id', $thread_id, pdo::PARAM_INT);
 	$statement -> execute();
 	$replies = $statement -> fetchAll(PDO::FETCH_ASSOC);
 
@@ -23,10 +23,18 @@ class Thread
 	}
 
 	try {
+	    $query = "SELECT `thread_name` FROM `threads` WHERE `deleted` IS NOT TRUE AND `thread_id` = :thread_id";
+	    $statement = $pdo -> prepare($query);
+	    $statement -> bindvalue(':thread_id', $thread_id, pdo::PARAM_INT);
+	    $statement -> execute();
+	    $thread = $statement -> fetch(PDO::FETCH_ASSOC);
+
+	    session_start();
+	    $user_name = $_SESSION['user_name'];
 	    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
 	    $twig = new Twig_Environment($loader);
 	    $template = $twig->loadTemplate('thread/index.twig');
-	    return $template->render([ 'replies' => $replies ]);
+	    return $template->render([ 'replies' => $replies, 'thread' => $thread, 'user_name' => $user_name]);
 	} catch (Exception $e) {
 	}
     }

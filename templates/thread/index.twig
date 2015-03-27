@@ -6,12 +6,12 @@
 	<meta name="keywords" content="FiNC, 掲示板, PHP, 練習" />
 	<meta name="description" content="研修1修了テストの課題" />
 	<meta property="og:description" content="研修1修了テストの課題" />
-	<title>{{ thread_name }} | 掲示板だよ</title>
+	<title>{{ thread.thread_name }} | 掲示板だよ</title>
     </head>
 
     <body>
 	{% for reply in replies %}
-	<li>メッセージ：{{ reply.message }} ユーザー：{{ reply.user_id }}</li>
+	<li>メッセージ：{{ reply.message }} ユーザー：{{ user_name }}</li>
 	{% endfor %}
 
 	<a href='/user/logout'>ログアウト</a>
