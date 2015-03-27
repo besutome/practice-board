@@ -63,6 +63,11 @@ $app->group('/reply', function () use ($app) {
 
 $app->group('/thread', function () use ($app) {
 
+    $app->get('/show/:id', function($id) use ($app) {
+	$thread = new Thread();
+	echo $thread -> show_thread($id);
+    });
+
     $app->post('/create', function() use ($app) {
 	$thread = new Thread();
 	echo $thread -> create_thread();

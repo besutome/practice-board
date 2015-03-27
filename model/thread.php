@@ -10,6 +10,27 @@ class Thread
 	$twig = new Twig_Environment($loader);
     }
 
+    public function show_thread($board_id){
+	$pdo = $this -> access_mysql();
+	$query = "SELECT `message`, `user_id` FROM `replies` WHERE `deleted` IS NOT TRUE AND `board_id` = :board_id";
+	$statement = $pdo -> prepare($query);
+	$statement -> bindvalue(':board_id', $board_id, pdo::PARAM_INT);
+	$statement -> execute();
+	$replies = $statement -> fetchAll(PDO::FETCH_ASSOC);
+
+	if (!isset($replies)) {
+	    throw new Exception('コメントがありません');
+	}
+
+	try {
+	    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
+	    $twig = new Twig_Environment($loader);
+	    $template = $twig->loadTemplate('thread/index.twig');
+	    return $template->render([ 'replies' => $replies ]);
+	} catch (Exception $e) {
+	}
+    }
+
     public function create_thread() {
 	$app = \Slim\Slim::getInstance();
 	session_start();
