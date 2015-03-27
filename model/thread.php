@@ -56,31 +56,25 @@ class Thread
 
 	try {
 	    $pdo = $this -> access_mysql();
-	    $query = "UPDATE `threads` SET `thread_name` = :thread_name WHERE `thread_id` = :thread_id AND `deleted` IS NOT TRUE";
-	    $statement = $pdo -> prepare($query);
-	    $statement -> bindvalue(':thread_name', $thread_name, pdo::PARAM_STR);
-	    $statement -> bindvalue(':thread_id', $thread_id, pdo::PARAM_INT);
-	    $thread_name = $_POST['thread_name'];
 	    $thread_id = $_POST['thread_id'];
+	    $thread_name = $_POST['thread_name'];
+
+	    if (isset($_POST['delete'])) {
+		$query = "UPDATE `threads` SET deleted = true WHERE `thread_id` = :thread_id AND `deleted` IS NOT TRUE";
+		$statement = $pdo -> prepare($query);
+	    } else {
+		$query = "UPDATE `threads` SET `thread_name` = :thread_name WHERE `thread_id` = :thread_id AND `deleted` IS NOT TRUE";
+		$statement = $pdo -> prepare($query);
+		$statement -> bindvalue(':thread_name', $thread_name, pdo::PARAM_STR);
+	    }
+
+	    $statement -> bindvalue(':thread_id', $thread_id, pdo::PARAM_INT);
 	    $statement -> execute();
 	} catch (PDOException $e) {
 	    echo 'データベースerror' . $e->getMessage();
 	}
 
 	return $app->redirect('/thread/manage');
-    }
-
-    public function delete_thread() {
-	$pdo = access_mysql();
-	$query = "UPDATE `threads` SET deleted = true WHERE `thread_id` = :thread_id AND `deleted` IS NOT TRUE";
-
-	$statement = $pdo -> prepare($query);
-	
-	// @TODO thread_idを取得するロジック
-	// $thread_id = 
-	$statement -> execute();
-
-	$template = $twig->loadTemplate('thread/delete.twig');
     }
 
     private function access_mysql() {

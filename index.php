@@ -83,10 +83,6 @@ $app->group('/thread', function () use ($app) {
 	echo $thread -> edit_thread();
     });
 
-    $app->get('/delete', function() use ($app) {
-	$thread = new Thread();
-	echo $thread -> delete_thread();
-    });
 });
 
 $app->run();
