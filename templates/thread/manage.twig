@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta charset="utf-8">
+	<meta property="og:image" content="/img/board.jpg" />
+	<meta name="keywords" content="FiNC, 掲示板, PHP, 練習" />
+	<meta name="description" content="研修1修了テストの課題" />
+	<meta property="og:description" content="研修1修了テストの課題" />
+	<title>スレッド編集 | 掲示板だよ</title>
+    </head>
+
+    <body>
+	<form action='/thread/edit' method='post'>
+	    {% for thread_id, thread_name in threads %}
+	    <li><label><input type='radio' name='thread_id' value='{{ thread_id }}'>{{ thread_name }}</a></label></li>
+	    {% endfor %}
+	    <p><label>新しいタイトル：<input type='text' name='thread_name'></label></p>
+	    <input type="submit" value='更新'>
+	</form>
+
+	<a href='/user/logout'>ログアウト</a>
+    </body>
+</html>

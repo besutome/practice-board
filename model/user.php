@@ -107,8 +107,7 @@ class User
 	session_destroy();
 
 	$app = \Slim\Slim::getInstance();
-	// $app->flash('info', $message);
-	// $app->redirect('/');
+	$app->redirect('/');
 	return $message;
     }
 

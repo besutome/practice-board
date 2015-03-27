@@ -10,9 +10,11 @@
     </head>
 
     <body>
-	aaaaaa
+	{% for thread_id, thread_name in threads %}
+	<li><a href='/thread/manage/{{ thread_id }}'>{{ thread_name }}</a></li>
+	{% endfor %}
 
-	{{ thread_name.0 }}
-	<?php var_dump($thread_name); ?>
+	<!-- <a href='/user/login'>マイページasaaa</a> -->
+	<a href='/user/logout'>ログアウト</a>
     </body>
 </html>

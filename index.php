@@ -78,6 +78,11 @@ $app->group('/thread', function () use ($app) {
 	echo $thread -> manage_thread();
     });
 
+    $app->post('/edit', function() use ($app) {
+	$thread = new Thread();
+	echo $thread -> edit_thread();
+    });
+
     $app->get('/delete', function() use ($app) {
 	$thread = new Thread();
 	echo $thread -> delete_thread();
