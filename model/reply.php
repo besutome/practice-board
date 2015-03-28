@@ -11,21 +11,22 @@ class Reply
     }
 
     public function create_reply() {
-	$pdo = access_mysql();
+	$app = \Slim\Slim::getInstance();
+	session_start();
+	$user_id = $_SESSION['user_id'];
+	$board_id = $_POST['board_id'];
+	$message = $_POST['message'];
+
+	$pdo = $this -> access_mysql();
 	$query = "INSERT INTO `replies` (board_id, user_id, message) VALUES (:board_id, :user_id, :message)";
 
 	$statement = $pdo -> prepare($query);
 	$statement -> bindvalue(':board_id', $board_id, pdo::PARAM_INT);
 	$statement -> bindvalue(':user_id', $user_id, pdo::PARAM_INT);
 	$statement -> bindvalue(':message', $message, pdo::PARAM_STR);
-
-	// $board_id = ;
-	// $user_id = ;
-	$message = $_POST('message');
 	$statement -> execute();
 
-	$template = $twig->loadTemplate('reply/create.twig');
-	return $template;
+	return $app->redirect("/thread/show/$board_id");
     }
 
     public function list_reply() {

@@ -10,15 +10,18 @@
     </head>
 
     <body>
-	{{ user_id }}
+	<form action='/reply/create' method='post'>
+	    <p><label>メッセージ:<input type='text' name='message' size='30' maxlength='30'></label></p>
+	    <input type='hidden' name='board_id' value='{{ thread_id }}''>
+	    <p><input type='submit' value='投稿'></p>
+	</form>
 
+	<hr>
+	
 	{% for reply in replies %}
 	    {% for posted in posted_user_names %}
 		{% if reply.user_id == posted.user_id %}
 		    <li>メッセージ：{{ reply.message }} ユーザー：{{ posted.user_name }}</li>
-		{% endif %}
-		{% if user_id == posted.user_id %}
-		    <button>編集</button>
 		{% endif %}
 	    {% endfor %}
 	{% endfor %}

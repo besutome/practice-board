@@ -46,7 +46,7 @@ class Thread
 	    $twig = new Twig_Environment($loader);
 	    $template = $twig->loadTemplate('thread/index.twig');
 
-	    return $template->render([ 'replies' => $replies, 'thread' => $thread, 'user_id' => $user_id, 'posted_user_names' => $posted_user_names]);
+	    return $template->render(['thread_id' => $thread_id, 'replies' => $replies, 'thread' => $thread, 'user_id' => $user_id, 'posted_user_names' => $posted_user_names]);
 	} catch (Exception $e) {
 	}
     }
