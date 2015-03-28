@@ -10,11 +10,17 @@
     </head>
 
     <body>
+	{{ user_id }}
+
 	{% for reply in replies %}
-	<li>メッセージ：{{ reply.message }} ユーザー：{{ user_name }}</li>
-	{% endfor %}
-	{% for posted_user_name in posted_user_names %}
-	{{ posted_user_name }}
+	    {% for posted in posted_user_names %}
+		{% if reply.user_id == posted.user_id %}
+		    <li>メッセージ：{{ reply.message }} ユーザー：{{ posted.user_name }}</li>
+		{% endif %}
+		{% if user_id == posted.user_id %}
+		    <button>編集</button>
+		{% endif %}
+	    {% endfor %}
 	{% endfor %}
 	<a href='/reply/list'>投稿したメッセージ一覧</a>
 	<a href='/user/logout'>ログアウト</a>

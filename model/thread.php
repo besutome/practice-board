@@ -35,18 +35,18 @@ class Thread
 	    $statement -> execute();
 	    $thread = $statement -> fetch(PDO::FETCH_ASSOC);
 
-	    $query = "SELECT `user_name` FROM `users` WHERE `deleted` IS NOT TRUE AND `user_id` IN ($place_holders)";
+	    $query = "SELECT `user_name`, `user_id` FROM `users` WHERE `deleted` IS NOT TRUE AND `user_id` IN ($place_holders)";
 	    $statement = $pdo -> prepare($query);
 	    $statement -> execute($user_id);
-	    $posted_user_names = $statement -> fetchAll(PDO::FETCH_COLUMN, 0);
-	    
+	    $posted_user_names = $statement -> fetchAll(PDO::FETCH_ASSOC);
+
 	    session_start();
-	    $user_name = $_SESSION['user_name'];
+	    $user_id = $_SESSION['user_id'];
 	    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
 	    $twig = new Twig_Environment($loader);
 	    $template = $twig->loadTemplate('thread/index.twig');
 
-	    return $template->render([ 'replies' => $replies, 'thread' => $thread, 'user_name' => $user_name, 'posted_user_names' => $posted_user_names]);
+	    return $template->render([ 'replies' => $replies, 'thread' => $thread, 'user_id' => $user_id, 'posted_user_names' => $posted_user_names]);
 	} catch (Exception $e) {
 	}
     }
