@@ -16,7 +16,7 @@ class Reply
 	$user_id = $_SESSION['user_id'];
 	$board_id = $_POST['board_id'];
 	$message = $_POST['message'];
-
+// var_dump($_SESSION);exit;
 	$pdo = $this -> access_mysql();
 	$query = "INSERT INTO `replies` (board_id, user_id, message) VALUES (:board_id, :user_id, :message)";
 

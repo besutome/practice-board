@@ -21,7 +21,6 @@ class Thread
 	if (!isset($replies)) {
 	    throw new Exception('コメントがありません');
 	}
-
 	try {
 	    foreach ($replies as $key => $value) {
 		$user_id[] += $value['user_id'];
@@ -35,10 +34,21 @@ class Thread
 	    $statement -> execute();
 	    $thread = $statement -> fetch(PDO::FETCH_ASSOC);
 
-	    $query = "SELECT `user_name`, `user_id` FROM `users` WHERE `deleted` IS NOT TRUE AND `user_id` IN ($place_holders)";
+
+
+	    foreach( $user_id as $key => $value ){
+		$params[] = ":user_id{$key}";
+	    }
+	    $param = implode(", ", $params);
+	    $query = "SELECT `user_name`, `user_id` FROM `users` WHERE `deleted` IS NOT TRUE AND `user_id` IN ($param)";
 	    $statement = $pdo -> prepare($query);
-	    $statement -> execute($user_id);
+	    foreach ( $user_id as $key => $value ) {
+		$statement->bindValue(":user_id{$key}", intval($value), PDO::PARAM_INT);
+	    }
+	    $statement -> execute();
 	    $posted_user_names = $statement -> fetchAll(PDO::FETCH_ASSOC);
+
+
 
 	    session_start();
 	    $user_id = $_SESSION['user_id'];
