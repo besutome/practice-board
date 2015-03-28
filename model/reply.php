@@ -30,34 +30,41 @@ class Reply
     }
 
     public function list_reply() {
-	$pdo = access_mysql();
-	$statement = $pdo -> prepare( "SELECT `message` FROM `replies` WHERE `user_id` = :user_id" );
+	session_start();
+	$user_id = $_SESSION['user_id'];
+
+	$pdo = $this -> access_mysql();
+	$statement = $pdo -> prepare( "SELECT `reply_id`, `message` FROM `replies` WHERE `user_id` = :user_id AND `deleted` IS NOT TRUE" );
 	$statement -> bindvalue(':user_id', $user_id, pdo::PARAM_STR);
-	
-	// @todo user_idを取得するロジック
-	// $user_id = ;
 	$statement -> execute();
+	$result = $statement -> fetchAll(PDO::FETCH_ASSOC);
 
-	$result = $statement -> fetch(PDO::FETCH_ASSOC);
-
+	$loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
+	$twig = new Twig_Environment($loader);
 	$template = $twig->loadTemplate('reply/list.twig');
-	return $result;
+
+	return $template->render([ 'messages' => $result ]);
     }
 
     public function manage_reply() {
-	$pdo = access_mysql();
-	$query = "UPDATE `replies` SET message = :message WHERE `reply_id` = :reply_id";
-
-	$statement = $pdo -> prepare($query);
-	$statement -> bindValue(':message', $message, PDO::PARAM_STR);
-	$statement -> bindValue(':reply_id', $reply_id, PDO::PARAM_INT);
-
+	$app = \Slim\Slim::getInstance();
+	$reply_id = $_POST['reply_id'];
 	$message = $_POST['message'];
-	// @todo reply_idを取得するロジック
-	// $reply_id = ;
+	$pdo = $this -> access_mysql();
+
+	if (isset($_POST['delete'])) {
+	    $query = "UPDATE `replies` SET `deleted` = true WHERE `reply_id` = :reply_id AND `deleted` IS NOT TRUE";
+	    $statement = $pdo -> prepare($query);
+	} else {
+	    $query = "UPDATE `replies` SET message = :message WHERE `reply_id` = :reply_id AND `deleted` IS NOT TRUE";
+	    $statement = $pdo -> prepare($query);
+	    $statement -> bindValue(':message', $message, PDO::PARAM_STR);
+	}
+
+	$statement -> bindValue(':reply_id', $reply_id, PDO::PARAM_INT);
 	$statement -> execute();
 
-	$template = $twig->loadTemplate('reply/manage.twig');
+	return $app->redirect("/reply/list");
 
     }
 

@@ -10,9 +10,15 @@
     </head>
 
     <body>
-	{% for reply in replies %}
-	<li>メッセージ：{{ reply.message }} ユーザー：{{ user_name }}</li>
-	{% endfor %}
+	<form action='/reply/manage' method='post'>
+	    {% for message in messages %}
+	    <li><label><input type='radio' name='reply_id' value='{{ message.reply_id }}'>メッセージ：{{ message.message }}</a></label></li>
+
+	    {% endfor %}
+	    <p><label>メッセージ更新：<input type='text' name='message'></label></p>
+	    <p><label><input type="checkbox" name='delete' value='1'>削除</label></p>
+	    <input type="submit" value='更新'>
+	</form>
 
 	<a href='/reply/list'>投稿したメッセージ一覧</a>
 	<a href='/user/logout'>ログアウト</a>
