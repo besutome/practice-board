@@ -34,8 +34,6 @@ class Thread
 	    $statement -> execute();
 	    $thread = $statement -> fetch(PDO::FETCH_ASSOC);
 
-
-
 	    foreach( $user_id as $key => $value ){
 		$params[] = ":user_id{$key}";
 	    }
@@ -48,8 +46,6 @@ class Thread
 	    $statement -> execute();
 	    $posted_user_names = $statement -> fetchAll(PDO::FETCH_ASSOC);
 
-
-
 	    session_start();
 	    $user_id = $_SESSION['user_id'];
 	    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
@@ -58,6 +54,13 @@ class Thread
 
 	    return $template->render(['thread_id' => $thread_id, 'replies' => $replies, 'thread' => $thread, 'user_id' => $user_id, 'posted_user_names' => $posted_user_names]);
 	} catch (Exception $e) {
+	    session_start();
+	    $user_id = $_SESSION['user_id'];
+	    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
+	    $twig = new Twig_Environment($loader);
+	    $template = $twig->loadTemplate('thread/index.twig');
+
+	    return $template->render(['thread_id' => $thread_id, 'replies' => $replies, 'thread' => $thread, 'user_id' => $user_id, 'posted_user_names' => $posted_user_names]);
 	}
     }
 
