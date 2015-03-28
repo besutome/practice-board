@@ -19,9 +19,7 @@ class Reply
 	$statement -> bindvalue(':user_id', $user_id, pdo::PARAM_INT);
 	$statement -> bindvalue(':message', $message, pdo::PARAM_STR);
 
-	// @todo board_idを取得するロジック
 	// $board_id = ;
-	// @todo user_idを取得するロジック
 	// $user_id = ;
 	$message = $_POST('message');
 	$statement -> execute();

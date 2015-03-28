@@ -23,18 +23,30 @@ class Thread
 	}
 
 	try {
+	    foreach ($replies as $key => $value) {
+		$user_id[] += $value['user_id'];
+	    }
+	    $user_id = array_unique($user_id);
+	    $place_holders = implode(',', array_fill(0, count($user_id), '?'));
+	    
 	    $query = "SELECT `thread_name` FROM `threads` WHERE `deleted` IS NOT TRUE AND `thread_id` = :thread_id";
 	    $statement = $pdo -> prepare($query);
 	    $statement -> bindvalue(':thread_id', $thread_id, pdo::PARAM_INT);
 	    $statement -> execute();
 	    $thread = $statement -> fetch(PDO::FETCH_ASSOC);
 
+	    $query = "SELECT `user_name` FROM `users` WHERE `deleted` IS NOT TRUE AND `user_id` IN ($place_holders)";
+	    $statement = $pdo -> prepare($query);
+	    $statement -> execute($user_id);
+	    $posted_user_names = $statement -> fetchAll(PDO::FETCH_COLUMN, 0);
+	    
 	    session_start();
 	    $user_name = $_SESSION['user_name'];
 	    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
 	    $twig = new Twig_Environment($loader);
 	    $template = $twig->loadTemplate('thread/index.twig');
-	    return $template->render([ 'replies' => $replies, 'thread' => $thread, 'user_name' => $user_name]);
+
+	    return $template->render([ 'replies' => $replies, 'thread' => $thread, 'user_name' => $user_name, 'posted_user_names' => $posted_user_names]);
 	} catch (Exception $e) {
 	}
     }
