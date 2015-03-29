@@ -26,7 +26,6 @@ class Thread
 		$user_id[] += $value['user_id'];
 	    }
 	    $user_id = array_unique($user_id);
-	    $place_holders = implode(',', array_fill(0, count($user_id), '?'));
 	    
 	    $query = "SELECT `thread_name` FROM `threads` WHERE `deleted` IS NOT TRUE AND `thread_id` = :thread_id";
 	    $statement = $pdo -> prepare($query);

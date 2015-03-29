@@ -12,6 +12,11 @@
     <body>
 	<form action='/reply/manage' method='post'>
 	    {% for message in messages %}
+	    {% for thread in threads %}
+		{% if message.board_id == thread.thread_id %}
+		<h3>スレッド名：{{ thread.thread_name }}</h3>
+		{% endif %}
+	    {% endfor %}
 	    <li><label><input type='radio' name='reply_id' value='{{ message.reply_id }}'>メッセージ：{{ message.message }}</a></label></li>
 
 	    {% endfor %}

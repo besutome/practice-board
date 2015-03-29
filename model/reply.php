@@ -34,16 +34,32 @@ class Reply
 	$user_id = $_SESSION['user_id'];
 
 	$pdo = $this -> access_mysql();
-	$statement = $pdo -> prepare( "SELECT `reply_id`, `message` FROM `replies` WHERE `user_id` = :user_id AND `deleted` IS NOT TRUE" );
+	$statement = $pdo -> prepare( "SELECT `reply_id`, `message`, `board_id` FROM `replies` WHERE `user_id` = :user_id AND `deleted` IS NOT TRUE" );
 	$statement -> bindvalue(':user_id', $user_id, pdo::PARAM_STR);
 	$statement -> execute();
-	$result = $statement -> fetchAll(PDO::FETCH_ASSOC);
+	$messages = $statement -> fetchAll(PDO::FETCH_ASSOC);
+	foreach( $messages as $key => $value ){
+	    $board_id[] = $value['board_id'];
+	}
+	$board_id = array_unique($board_id);
+	foreach( $board_id as $key => $value ){
+	    $params[] = ":board_id{$key}";
+	}
+	$param = implode(", ", $params);
+
+	$pdo = $this -> access_mysql();
+	$statement = $pdo -> prepare( "SELECT `thread_id`, `thread_name` FROM `threads` WHERE `thread_id` IN ($param) AND `deleted` IS NOT TRUE" );
+	foreach ( $board_id as $key => $value ) {
+	    $statement->bindValue(":board_id{$key}", intval($value), PDO::PARAM_INT);
+	}
+	$statement -> execute();
+	$threads = $statement -> fetchAll(PDO::FETCH_ASSOC);
 
 	$loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
 	$twig = new Twig_Environment($loader);
 	$template = $twig->loadTemplate('reply/list.twig');
 
-	return $template->render([ 'messages' => $result ]);
+	return $template->render([ 'messages' => $messages, 'threads' => $threads ]);
     }
 
     public function manage_reply() {
